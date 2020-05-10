@@ -1,0 +1,12 @@
+name: Sorteio
+title: Sorteio
+username:
+account: vfelix
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1519065
+bundleId: 2613906
+url: https://vfelix.shinyapps.io/Sorteio/
+when: 1574625135.98088
+asMultiple: FALSE
+asStatic: FALSE

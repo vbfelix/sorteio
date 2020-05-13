@@ -7,18 +7,20 @@
 #    http://shiny.rstudio.com/
 #
 
+# setup -------------------------------------------------------------------
+
 library(shiny)
 library(dplyr)
 library(ggplot2)
 library(forcats)
+library(shinyTable)
+# install.packages("shinytable")
 
-# Define UI for application that draws a histogram
+# front -------------------------------------------------------------------
+
 ui <- fluidPage(
 
-    # Application title
-    titlePanel("OSetup"),
-
-    # Sidebar with a slider input for number of bins 
+    titlePanel("Sorteio"),
     sidebarLayout(
         sidebarPanel(
             sliderInput("cab",
@@ -30,17 +32,23 @@ ui <- fluidPage(
                         "Número de peseiros",
                         min = 1,
                         max = 15,
-                        value = 5)
+                        value = 5)#,
+            # htable("tbl"),
+            # actionButton("actionButtonID","Atualizar")
         ),
-
-        # Show a plot of the generated distribution
         mainPanel(
-           plotOutput("distPlot")
+            # ,
+            #update button
+            #to show saved edits
+            # tableOutput("tblNonEdit"),
+            plotOutput("distPlot")
         )
     )
+    
 )
 
-# Define server logic required to draw a histogram
+# back --------------------------------------------------------------------
+
 server <- function(input, output) {
 
     output$distPlot <- renderPlot({
@@ -49,20 +57,19 @@ server <- function(input, output) {
         n_pe  <- length(peseiro)
         n_cab <- length(cabeceiro)
         
-        # x = 3
-        # i = 2
         sort_equal <- function(x){
             out <- 1:x
+            
             for(i in 1:(x-1)){
                 out <- c(out, c(lead(1:x,i),1:i))
             }
+            
             out <- na.exclude(out)
+            
             return(out)
         }
         
-        # sort_equal(3)
-        
-        if(n_pe != n_cab){
+        if( n_pe != n_cab){
             sorteio  =  rep(1:n_pe,n_cab)
         }else{
             sorteio  = sort_equal(n_pe)
@@ -103,7 +110,6 @@ server <- function(input, output) {
             geom_tile(aes(fill = pe),col = "black", show.legend = F, alpha = .7)+
             geom_text(aes(label = pe), fontface = "bold",size = 3.5)+
             scale_fill_brewer(palette = "Set1")+
-            # pga_logo()+
             facet_grid(num_rodada~., scales = "free",switch = "both")+
             labs(x = "Cabeceiro",
                  y = "",
